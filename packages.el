@@ -31,6 +31,8 @@
 
 (defconst local-packages
   '(
+    css-mode
+    flycheck
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -62,5 +64,13 @@ Each entry is either:
 
 (defun valrus/post-init-web-mode ()
   (setq-default web-mode-markup-indent-offset 2))
+
+(defun valrus/post-init-css-mode ()
+  (setq-default css-indent-offset 2))
+
+(defun valrus/post-init-flycheck ()
+  (setq flycheck-command-wrapper-function
+        (lambda (command)
+          (append '("bundle" "exec") command))))
 
 ;;; packages.el ends here
