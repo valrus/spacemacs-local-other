@@ -31,6 +31,7 @@
 
 (defconst local-packages
   '(
+    fill-column-indicator
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -60,7 +61,12 @@ Each entry is either:
       - A list beginning with the symbol `recipe' is a melpa
         recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
 
-(defun valrus/post-init-web-mode ()
+(defun local/post-init-web-mode ()
   (setq-default web-mode-markup-indent-offset 2))
+
+(defun local/post-init-fill-column-indicator ()
+  (setq fci-rule-width 1)
+  (setq fci-rule-color "lightblue")
+  (setq-default fill-column 120))
 
 ;;; packages.el ends here
