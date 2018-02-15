@@ -31,7 +31,9 @@
 
 (defconst local-packages
   '(
+    css-mode
     fill-column-indicator
+    flycheck
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -68,5 +70,13 @@ Each entry is either:
   (setq fci-rule-width 1)
   (setq fci-rule-color "lightblue")
   (setq-default fill-column 120))
+
+(defun local/post-init-css-mode ()
+  (setq-default css-indent-offset 2))
+
+(defun local/post-init-flycheck ()
+  (setq flycheck-command-wrapper-function
+        (lambda (command)
+          (append '("bundle" "exec") command))))
 
 ;;; packages.el ends here
