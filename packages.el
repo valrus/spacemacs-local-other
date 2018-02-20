@@ -34,6 +34,7 @@
     css-mode
     fill-column-indicator
     flycheck
+    ruby-mode
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -73,6 +74,9 @@ Each entry is either:
 
 (defun local/post-init-css-mode ()
   (setq-default css-indent-offset 2))
+
+(defun local/post-init-ruby-mode ()
+  (setq-default ruby-insert-encoding-magic-comment nil))
 
 (defun local/post-init-flycheck ()
   (setq flycheck-command-wrapper-function
