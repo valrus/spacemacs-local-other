@@ -5,6 +5,7 @@
 (setq projectile-enable-caching t)
 
 (defun my-ruby-config ()
+  (turn-on-fci-mode)
   ;; Don't tell me about trailing whitespace
   (setq show-trailing-whitespace nil)
   ;; Don't add newlines to the end of every file

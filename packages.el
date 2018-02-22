@@ -32,7 +32,9 @@
 (defconst local-packages
   '(
     css-mode
+    fill-column-indicator
     flycheck
+    ruby-mode
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -62,13 +64,21 @@ Each entry is either:
       - A list beginning with the symbol `recipe' is a melpa
         recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
 
-(defun valrus/post-init-web-mode ()
+(defun local/post-init-web-mode ()
   (setq-default web-mode-markup-indent-offset 2))
 
-(defun valrus/post-init-css-mode ()
+(defun local/post-init-fill-column-indicator ()
+  (setq fci-rule-width 1)
+  (setq fci-rule-color "lightblue")
+  (setq-default fill-column 120))
+
+(defun local/post-init-css-mode ()
   (setq-default css-indent-offset 2))
 
-(defun valrus/post-init-flycheck ()
+(defun local/post-init-ruby-mode ()
+  (setq-default ruby-insert-encoding-magic-comment nil))
+
+(defun local/post-init-flycheck ()
   (setq flycheck-command-wrapper-function
         (lambda (command)
           (append '("bundle" "exec") command))))
