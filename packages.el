@@ -32,9 +32,12 @@
 (defconst local-packages
   '(
     css-mode
+    enh-ruby-mode
     fill-column-indicator
     flycheck
+    js2-mode
     ruby-mode
+    spaceline
     web-mode
     )
   "The list of Lisp packages required by the local layer.
@@ -64,23 +67,91 @@ Each entry is either:
       - A list beginning with the symbol `recipe' is a melpa
         recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
 
+(defun local/web-mode-settings ()
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+
 (defun local/post-init-web-mode ()
-  (setq-default web-mode-markup-indent-offset 2))
+  (spacemacs/add-to-hook
+   'web-mode-hook
+   '(local/web-mode-settings)))
 
 (defun local/post-init-fill-column-indicator ()
   (setq fci-rule-width 1)
-  (setq fci-rule-color "lightblue")
-  (setq-default fill-column 120))
+  (setq fci-rule-color "lightblue"))
 
 (defun local/post-init-css-mode ()
   (setq-default css-indent-offset 2))
 
+(defun local/js2-mode-hook ()
+  (setq js-indent-level 2))
+
+(defun local/post-init-js2-mode ()
+  (add-hook 'js2-mode-hook 'local/js2-mode-hook))
+
+(defun local/common-ruby-mode-settings ()
+  (setq ruby-insert-encoding-magic-comment nil))
+
+(defun local/enh-ruby-hook ()
+  (local/common-ruby-mode-settings)
+
+  (turn-on-fci-mode)
+  (setq-default fill-column 100)
+
+  ;; Don't tell me about trailing whitespace
+  (setq show-trailing-whitespace nil)
+  (setq spacemacs-show-trailing-whitespace nil)
+  ;; Don't add newlines to the end of every file
+  (setq mode-require-final-newline nil)
+
+  (setq enh-ruby-add-encoding-comment-on-save nil)
+  (setq enh-ruby-use-encoding-map nil))
+
+(defun local/post-init-enh-ruby-mode ()
+  (setq enh-ruby-program (concat (getenv "HOME") "/.rvm/rubies/ruby-2.3.5/bin/ruby"))
+  (add-hook 'enh-ruby-mode-hook 'local/enh-ruby-hook))
+
 (defun local/post-init-ruby-mode ()
-  (setq-default ruby-insert-encoding-magic-comment nil))
+  (local/common-ruby-mode-settings))
+
+(defun local/post-init-enh-ruby-mode ()
+  (local/common-ruby-mode-settings))
 
 (defun local/post-init-flycheck ()
-  (setq flycheck-command-wrapper-function
-        (lambda (command)
-          (append '("bundle" "exec") command))))
+  (setq-default flycheck-scss-lint-executable
+                (concat (getenv "HOME") "/.rvm/gems/ruby-2.3.5@global/bin/scss-lint")))
+
+(defun local/post-init-spaceline ()
+  (let ((modeline-font "Iosevka Slab")
+        (modeline-height 100))
+                                        ; File name and navigation percentage
+    (set-face-attribute 'mode-line nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    (set-face-attribute 'mode-line-inactive nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    ;; Other modeline faces
+    (set-face-attribute 'powerline-active1 nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    (set-face-attribute 'powerline-active2 nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    (set-face-attribute 'powerline-inactive1 nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    (set-face-attribute 'powerline-inactive2 nil
+                        :font modeline-font
+                        :height modeline-height
+                        :weight 'ultra-light)
+    )
+  (setq powerline-default-separator nil)
+  (spaceline-compile))
 
 ;;; packages.el ends here
